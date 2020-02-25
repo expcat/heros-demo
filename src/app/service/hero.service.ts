@@ -10,7 +10,7 @@ import { MessageService } from '@svc/message.service';
   providedIn: 'root'
 })
 export class HeroService {
-  private heroesUrl = 'api/heroes';
+  private heroesUrl = '/api/heroes';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -61,7 +61,7 @@ export class HeroService {
 
   // GET 通过id获取英雄。如果找不到时返回`undefined`
   getHeroNo404<Data>(id: number): Observable<Hero> {
-    const url = `${this.heroesUrl}/?id=${id}`;
+    const url = `${this.heroesUrl}?id=${id}`;
     return this.http.get<Hero[]>(url).pipe(
       map((heroes) => heroes[0]), // returns a {0|1} element array
       tap((h) => {
@@ -105,7 +105,7 @@ export class HeroService {
       // 如果搜索不到关键词，返回空数组
       return of([]);
     }
-    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+    return this.http.get<Hero[]>(`${this.heroesUrl}?name=${term}`).pipe(
       tap((x) =>
         x.length
           ? this.log(`找到匹配的英雄 "${term}"`)
