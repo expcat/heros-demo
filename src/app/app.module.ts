@@ -21,7 +21,7 @@ import { DelonMockModule } from '@delon/mock';
 import * as MOCKDATA from '../../_mock';
 // 只对开发环境有效
 import { environment } from '../environments/environment';
-const MOCKMODULE = !environment.production
+const MOCKMODULE = environment.mock
   ? // data: any = null Mock 数据规则
     // delay: number = 300 请求延迟，单位：毫秒
     // force: boolean = false 是否强制所有请求都Mock

@@ -56,15 +56,31 @@ function getHero(id: number): Hero {
   }
 }
 
+function getHeroNoData404(id: number): any {
+  const hero = getHero(id);
+  if (hero) {
+    return hero;
+  } else {
+    throw new MockStatusError(404);
+  }
+}
+
 function serchHeros(name: string): Hero[] {
   return heroes.filter((h) => h.name.includes(name));
 }
 
 export const HEROES = {
   'GET /api/heroes': getHeros(),
-  'GET /api/heroes?name=:name': (req: MockRequest) =>
-    serchHeros(req.params?.name),
   'GET /api/heroes/:id': (req: MockRequest) => getHero(+req.params?.id),
+  'GET /api/heroes/': (req: MockRequest) => {
+    if (req.queryString?.name) {
+      return serchHeros(req.queryString?.name);
+    } else if (req.queryString?.id) {
+      return getHeroNoData404(+req.queryString?.id);
+    } else {
+      throw new MockStatusError(404);
+    }
+  },
   'POST /api/heroes': (req: MockRequest) => addHero(req.body?.name),
   'PUT /api/heroes(.*)': (req: MockRequest) => updateHero(req.params),
   'DELETE /api/heroes/:id': (req: MockRequest) => deleteHero(+req.params?.id)
